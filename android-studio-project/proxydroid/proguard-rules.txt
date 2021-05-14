@@ -1,0 +1,11 @@
+# rhino
+-dontwarn org.mozilla.javascript.**
+-dontwarn org.mozilla.classfile.**
+-keep class org.mozilla.javascript.JavaAdapter  { *; }
+-keep class org.mozilla.javascript.ES6Generator { *; }
+
+# cpp/exec
+-keep class java.lang.String           { *; }
+-keep class java.lang.OutOfMemoryError { *; }
+-keep class java.io.FileDescriptor     { *; }
+-keep class org.proxydroid.Exec        { *; }

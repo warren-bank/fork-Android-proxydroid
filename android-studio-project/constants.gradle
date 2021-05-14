@@ -1,0 +1,12 @@
+project.ext {
+  releaseVersionCode = 72
+  releaseVersion     = '3.2.0'
+  javaVersion        = JavaVersion.VERSION_1_8
+  minSdkVersion      = 16
+  targetSdkVersion   = 30
+  compileSdkVersion  = 30
+  buildToolsVersion  = '30.0.3'
+
+  libJsonSimpleVersion = '1.1.1'
+  libRhinoVersion      = '1.7.13'
+}

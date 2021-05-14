@@ -2,7 +2,7 @@
 
 Global Proxy App for Android System
 
-ProxyDroid is distributed under GPLv3 with many other open source software, 
+ProxyDroid is distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.txt) with many other open source software, 
 here is a list of them:
 
  * cntlm - authentication proxy: http://cntlm.sourceforge.net/

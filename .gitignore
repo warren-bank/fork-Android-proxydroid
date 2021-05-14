@@ -1,16 +1,23 @@
-bin/
-gen/
-local.properties
-*.iml
+# Android generated
+gen
+obj
+lint.xml
+
+# IntelliJ IDEA
 .idea
-.cxx
-target/
-obj/
-libs/armeabi/redsocks
-libs/armeabi/shadowsocks
-libs/armeabi/shrpx
-gen-external-apklibs/
-classes/
+*.iml
+*.ipr
+*.iws
+classes
+gen-external-apklibs
+
+# Gradle
 .gradle
-build/
-app/release
+build
+buildout
+out
+release
+
+# Other
+.DS_Store
+local.properties
