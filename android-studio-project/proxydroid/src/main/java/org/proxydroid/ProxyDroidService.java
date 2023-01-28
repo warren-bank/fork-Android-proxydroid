@@ -326,6 +326,9 @@ public class ProxyDroidService extends Service {
           ? new Notification.Builder(this, "Service")
           : new Notification.Builder(this);
 
+        if (Build.VERSION.SDK_INT >= 31)
+            builder.setForegroundServiceBehavior(Notification.FOREGROUND_SERVICE_IMMEDIATE);
+
         initSoundVibrateLights(builder);
 
         builder.setAutoCancel(false);
@@ -358,7 +361,12 @@ public class ProxyDroidService extends Service {
 
         Intent intent = new Intent(this, ProxyDroid.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        pendIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        int flags = 0;
+        if (Build.VERSION.SDK_INT >= 23)
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+
+        pendIntent = PendingIntent.getActivity(this, 0, intent, flags);
     }
 
     /**

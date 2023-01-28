@@ -38,6 +38,7 @@
 
 package org.proxydroid;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -48,7 +49,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -56,6 +57,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.CheckBoxPreference;
@@ -66,6 +68,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -87,6 +90,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -162,7 +166,7 @@ public class ProxyDroid extends PreferenceActivity
         String versionName = "";
         try {
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-        } catch (NameNotFoundException ex) {
+        } catch (PackageManager.NameNotFoundException ex) {
             versionName = "";
         }
 
@@ -282,6 +286,42 @@ public class ProxyDroid extends PreferenceActivity
         excludedSsidList.setEntryValues(pureSsid);
     }
 
+    private void requestPermissions() {
+        List<String> permissions = new ArrayList<String>();
+        List<Intent> intents     = new ArrayList<Intent>();
+
+        Uri uri = Uri.parse("package:" + getPackageName());
+
+        if (Build.VERSION.SDK_INT >= 33) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            if (!Environment.isExternalStorageManager()) {
+                intents.add(
+                    new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri)
+                );
+            }
+        }
+        else {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+        }
+
+        if (!permissions.isEmpty()) {
+            requestPermissions(permissions.toArray(new String[permissions.size()]), 0);
+        }
+
+        if (!intents.isEmpty()) {
+            for (Intent intent : intents) {
+                startActivity(intent);
+            }
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -344,6 +384,8 @@ public class ProxyDroid extends PreferenceActivity
 
         loadNetworkList();
 
+        requestPermissions();
+
         new Thread() {
             @Override
             public void run() {
@@ -362,7 +404,7 @@ public class ProxyDroid extends PreferenceActivity
                 String versionName;
                 try {
                     versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                } catch (NameNotFoundException e) {
+                } catch (PackageManager.NameNotFoundException e) {
                     versionName = "NONE";
                 }
 
@@ -371,7 +413,7 @@ public class ProxyDroid extends PreferenceActivity
                     String version;
                     try {
                         version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-                    } catch (NameNotFoundException e) {
+                    } catch (PackageManager.NameNotFoundException e) {
                         version = "NONE";
                     }
 

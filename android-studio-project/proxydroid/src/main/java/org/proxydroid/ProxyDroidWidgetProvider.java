@@ -45,6 +45,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -59,25 +60,25 @@ public class ProxyDroidWidgetProvider extends AppWidgetProvider {
 	public static final String TAG = "ProxyDroidWidgetProvider";
 
 	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-			int[] appWidgetIds) {
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		final int N = appWidgetIds.length;
 
-		// Perform this loop procedure for each App Widget that belongs to this
-		// provider
+		// Perform this loop procedure for each App Widget that belongs to this provider
 		for (int i = 0; i < N; i++) {
 			int appWidgetId = appWidgetIds[i];
 
 			// Create an Intent to launch ExampleActivity
 			Intent intent = new Intent(context, ProxyDroidWidgetProvider.class);
 			intent.setAction(PROXY_SWITCH_ACTION);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-					0, intent, 0);
 
-			// Get the layout for the App Widget and attach an on-click listener
-			// to the button
-			RemoteViews views = new RemoteViews(context.getPackageName(),
-					R.layout.proxydroid_appwidget);
+			int flags = 0;
+			if (Build.VERSION.SDK_INT >= 23)
+				flags |= PendingIntent.FLAG_IMMUTABLE;
+
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, flags);
+
+			// Get the layout for the App Widget and attach an on-click listener to the button
+			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.proxydroid_appwidget);
 			views.setOnClickPendingIntent(R.id.serviceToggle, pendingIntent);
 
 			if (Utils.isWorking()) {
@@ -88,8 +89,7 @@ public class ProxyDroidWidgetProvider extends AppWidgetProvider {
 				Log.d(TAG, "Service stopped");
 			}
 
-			// Tell the AppWidgetManager to perform an update on the current App
-			// Widget
+			// Tell the AppWidgetManager to perform an update on the current App Widget
 			appWidgetManager.updateAppWidget(appWidgetId, views);
 		}
 	}
@@ -105,8 +105,12 @@ public class ProxyDroidWidgetProvider extends AppWidgetProvider {
 				views.setImageViewResource(R.id.serviceToggle, R.drawable.ing);
 
 				AppWidgetManager awm = AppWidgetManager.getInstance(context);
-				awm.updateAppWidget(awm.getAppWidgetIds(new ComponentName(
-						context, ProxyDroidWidgetProvider.class)), views);
+				awm.updateAppWidget(
+						awm.getAppWidgetIds(
+								new ComponentName(context, ProxyDroidWidgetProvider.class)
+						),
+						views
+				);
 			} catch (Exception ignore) {
 				// Nothing
 			}
@@ -125,8 +129,7 @@ public class ProxyDroidWidgetProvider extends AppWidgetProvider {
 			} else {
 
 				// Service is not working, then start it
-				SharedPreferences settings = PreferenceManager
-						.getDefaultSharedPreferences(context);
+				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
 				Profile mProfile = new Profile();
 				mProfile.getProfile(settings);

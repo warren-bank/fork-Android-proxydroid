@@ -2,6 +2,8 @@
 
 Global Proxy App for Android System
 
+Requires _root_ privileges.
+
 ProxyDroid is distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.txt) with many other open source software, 
 here is a list of them:
 
