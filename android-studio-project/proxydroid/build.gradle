@@ -79,8 +79,11 @@ android {
   }
 }
 
-configurations {
-  compile.exclude group: "junit", module: "junit"
+// https://stackoverflow.com/questions/57645919
+configurations.all {
+  resolutionStrategy.dependencySubstitution {
+    substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
+  }
 }
 
 dependencies {
