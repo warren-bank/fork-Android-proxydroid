@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.proxydroid">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,15 +14,17 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- file access permissions: Android 1 to 10 -->
+    <!-- note: Android 10 requires "requestLegacyExternalStorage" -->
     <uses-permission android:maxSdkVersion="29" android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- file access permissions: Android 11+ -->
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
 
     <application
         android:name=".ProxyDroidApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
 
         <activity
