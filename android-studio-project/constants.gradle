@@ -1,13 +1,14 @@
 project.ext {
+  applicationId      = 'org.proxydroid'
   releaseVersionCode = 320003
   releaseVersion     = '3.2.0.003'
   javaVersion        = JavaVersion.VERSION_1_8
   minSdkVersion      = 16
-  targetSdkVersion   = 33
-  compileSdkVersion  = 33
-  buildToolsVersion  = '33.0.1'
-  ndkVersion         = '21.3.6528147'
-  cmakeVersion       = '3.10.2.4988404'
+  targetSdkVersion   = 35
+  compileSdkVersion  = 35
+  buildToolsVersion  = '35.0.0'
+  ndkVersion         = '21.3.6528147'   // Do not update! r24 drops support for SDK versions 16-18. r23c doesn't seem to work either. Just leave it alone.
+  cmakeVersion       = '3.10.2.4988404' // Do not update!
 
   libJsonSimpleVersion = '1.1.1'
   libRhinoVersion      = '1.7.13'
