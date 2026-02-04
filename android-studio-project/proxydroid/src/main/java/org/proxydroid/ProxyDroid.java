@@ -75,6 +75,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -338,6 +339,12 @@ public class ProxyDroid extends PreferenceActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // fix for Android 15+ edge-to-edge layout enforcement
+        // https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/preference/PreferenceActivity.java
+        // https://android.googlesource.com/platform/frameworks/base/+/master/core/res/res/layout/preference_list_content.xml
+        ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0).setFitsSystemWindows(true);
+
         addPreferencesFromResource(R.xml.proxydroid_preference);
 
         hostText = (EditTextPreference) findPreference("host");

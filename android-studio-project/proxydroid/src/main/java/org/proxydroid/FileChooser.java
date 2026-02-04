@@ -55,8 +55,15 @@ public class FileChooser extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		currentDir = new File(Utils.getDataPath(this));
 		fill(currentDir);
+
+		// fix for Android 15+ edge-to-edge layout enforcement
+		// https://android.googlesource.com/platform/frameworks/base/+/main/core/java/android/app/ListActivity.java
+		// https://android.googlesource.com/platform/frameworks/base/+/master/core/res/res/layout/list_content_simple.xml
+		//   note: call AFTER fill()->setListAdapter()->ensureList()->setContentView()
+		findViewById(android.R.id.list).setFitsSystemWindows(true);
 	}
 
 	private void onFileClick(Option o) {
