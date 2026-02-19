@@ -1,7 +1,7 @@
 project.ext {
   applicationId      = 'org.proxydroid'
-  releaseVersionCode = 320005
-  releaseVersion     = '3.2.0.005'
+  releaseVersionCode = 320006
+  releaseVersion     = '3.2.0.006'
   javaVersion        = JavaVersion.VERSION_1_8
   minSdkVersion      = 16
   targetSdkVersion   = 35
